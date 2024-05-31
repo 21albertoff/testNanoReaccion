@@ -1,0 +1,100 @@
+body {
+  background-color: #3f3f3f;
+  background-image: url('../img/fondo.JPG');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  color: rgba(255, 255, 255, 1); /* Texto con opacidad reducida para oscurecerlo */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Sombra del texto */
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  text-align: center;
+}
+
+#traffic-light {
+  background: rgba(42, 42, 42, 1);
+  border-radius: 4px;
+  box-shadow: 0 40px 30px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  height: 120px;
+  margin: 100px auto;
+  animation: moveBackground 1s linear; /* Anima el movimiento del fondo */
+}
+
+@keyframes moveBackground {
+  from { margin: 0 auto; } /* Desde la posición inicial */
+  to { margin: 100px auto; }
+}
+
+#datos {
+  position: fixed; /* Fijar la posición */
+  bottom: 10%; /* Colocar en la parte inferior */
+  left: 50%; /* Centrar horizontalmente */
+  transform: translateX(-50%); /* Ajustar para centrar horizontalmente */
+  width: 80%; /* Ancho del div */
+  max-width: 600px; /* Ancho máximo */
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+#reaction-time {
+  font-size: 2rem;
+}
+
+.salidaFalsa {
+  color: rgb(255, 62, 62);
+  font-weight: bold; /* Establecer el peso de la fuente como negrita */
+}
+
+#message {
+  font-size: 1rem;
+}
+
+.light {
+  width: calc(100px - 10px); /* Resta el doble del margen (20px) del ancho total (100px) */
+  height: 100px;
+  margin: 0 3px; /* Margen lateral de 5px */
+  border-radius: 50%;
+  background: rgba(88, 88, 88, 0.61);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(12.7px);
+  -webkit-backdrop-filter: blur(12.7px);
+  border: 1px solid rgba(42, 42, 42, 0.3);
+}
+
+.on {
+  background: rgb(255, 62, 62);
+  box-shadow: 10px 40px 300px rgba(216, 62, 62, 0.67);
+}
+
+.off {
+  background: rgba(88, 88, 88, 0.61);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(12.7px);
+  -webkit-backdrop-filter: blur(12.7px);
+  border: 1px solid rgba(42, 42, 42, 0.3);
+}
+
+#footer {
+  position: fixed; /* Fijar la posición */
+  bottom: 0%; /* Colocar en la parte inferior */
+  left: 0%; /* Centrar horizontalmente */
+  transform: translateX(-0%); /* Ajustar para centrar horizontalmente */
+  width: 100%; /* Ancho del div */
+  background: rgba(0, 0, 0, 0.7);
+  padding: 10px 0;
+  
+}
+
+#footer a{
+  text-decoration: none;
+  color: white;
+}
+
