@@ -1,91 +1,108 @@
-// Obtener el mejor tiempo de reacción almacenado en el almacenamiento local o establecerlo en Infinity si no hay ninguno
-let bestReactionTime = parseFloat(localStorage.getItem('bestReactionTime')) || Infinity;
+// Verificar si hay un mejor tiempo de reacción almacenado en el almacenamiento local
+let bestReactionTime = localStorage.getItem('bestReactionTime');
+if (!bestReactionTime) {
+    bestReactionTime = Infinity; // Si no hay ningún tiempo almacenado, establecerlo en Infinity
+} else {
+    bestReactionTime = parseFloat(bestReactionTime); // Convertir el tiempo almacenado a un número flotante
+}
 
-// Elementos DOM
+// Resto del código
+
+let greenLightTime;
+let reactionTime;
+let lightTimeout;
+let spaceKeyPressed = false; // Variable de control
+
 const trafficLight = document.getElementById('traffic-light');
+const luzUno = trafficLight.children[0];
+const luzDos = trafficLight.children[1];
+const luzTres = trafficLight.children[2];
+const luzCuatro = trafficLight.children[3];
+const luzCinco = trafficLight.children[4];
 const reactionTimeDisplay = document.getElementById('reaction-time');
 const messageDisplay = document.getElementById('message');
 
-// Función para encender todas las luces
-function encenderLuces() {
-    trafficLight.querySelectorAll('.light').forEach(light => light.classList.remove('off'));
-}
-
-// Función para apagar todas las luces
 function apagarLuces() {
-    trafficLight.querySelectorAll('.light').forEach(light => light.classList.add('off'));
+    luzUno.classList.add('off');
+    luzDos.classList.add('off');
+    luzTres.classList.add('off');
+    luzCuatro.classList.add('off');
+    luzCinco.classList.add('off');
 }
 
-// Función para iniciar el semáforo
+function encenderLuces() {
+    luzUno.classList.remove('off');
+    luzDos.classList.remove('off');
+    luzTres.classList.remove('off');
+    luzCuatro.classList.remove('off');
+    luzCinco.classList.remove('off');
+}
+
 function startTrafficLight() {
     apagarLuces();
 
-    // Encender las luces una por una
-    let delay = 1000;
-    trafficLight.querySelectorAll('.light').forEach(light => {
-        setTimeout(() => light.classList.remove('off'), delay);
-        delay += 1000;
-    });
+    // Encendemos las luces una por una
+    setTimeout(() => luzUno.classList.remove('off'), 1000);
+    setTimeout(() => luzDos.classList.remove('off'), 2000);
+    setTimeout(() => luzTres.classList.remove('off'), 3000);
+    setTimeout(() => luzCuatro.classList.remove('off'), 4000);
+    setTimeout(() => luzCinco.classList.remove('off'), 5000);
 
-    // Apagar las luces aleatoriamente después de un tiempo
-    setTimeout(() => {
-        if (!spaceKeyPressed) {
+    // Establecemos un temporizador para apagar las luces aleatoriamente
+    esperarUnsegundo = setTimeout(() => {
+        esperarTiempoRandom = setTimeout(() => {
+            if (spaceKeyPressed) return;
             apagarLuces();
             greenLightTime = new Date().getTime();
-        }
+        }, Math.random() * 2000);
     }, 6000);
 }
 
-// Función para medir la reacción
 function measureReaction(event) {
-    if ((event.code === 'Space' || event.type === 'touchstart') && greenLightTime === undefined) {
-        reactionTimeDisplay.textContent = 'SALIDA FALSA';
+    if ((event.code === 'Space' || event.type === 'touchstart') && greenLightTime == undefined) {
+        reactionTimeDisplay.textContent = `SALIDA FALSA`;
         reactionTimeDisplay.classList.add('salidaFalsa');
         encenderLuces();
         messageDisplay.textContent = 'Presiona F5 para reiniciar';
-        spaceKeyPressed = true;
+        spaceKeyPressed = true; 
     } else if ((event.code === 'Space' || event.type === 'touchstart') && greenLightTime) {
-        reactionTime = new Date().getTime() - greenLightTime;
+        reactionTime = (new Date().getTime()) - greenLightTime;
         reactionTimeDisplay.textContent = `Tiempo de reacción: ${reactionTime} ms`;
 
         // Actualizar el mejor tiempo de reacción si es necesario
         if (reactionTime < bestReactionTime) {
             bestReactionTime = reactionTime;
             messageDisplay.textContent = `¡Nuevo mejor tiempo! ${bestReactionTime} ms`;
+
+            // Guardar el nuevo mejor tiempo en el almacenamiento local
             localStorage.setItem('bestReactionTime', bestReactionTime);
         } else {
             messageDisplay.textContent = 'Presiona F5 para reiniciar';
         }
 
-        // Desactivar los eventos de teclado y táctiles
         document.removeEventListener('keydown', measureReaction);
         document.removeEventListener('touchstart', measureReaction);
         clearTimeout(lightTimeout);
     }
 }
 
-// Evento para medir la reacción con teclado
 document.addEventListener('keydown', measureReaction);
-
-// Evento para medir la reacción con pantalla táctil
 document.addEventListener('touchstart', measureReaction);
 
-// Iniciar el semáforo
 startTrafficLight();
 
-// Evento para el movimiento del ratón
-document.addEventListener('mousemove', function(event) {
-    const mouseX = event.clientX;
-    const mouseY = event.clientY;
-    const offsetX = (mouseX - window.innerWidth / 2) / 100; 
-    const offsetY = (mouseY - window.innerHeight / 2) / 100; 
+document.addEventListener("mousemove", function(event) {
+    var mouseX = event.clientX;
+    var mouseY = event.clientY;
+    var offsetX = (mouseX - window.innerWidth / 2) / 100; 
+    var offsetY = (mouseY - window.innerHeight / 2) / 100; 
     document.body.style.backgroundPosition = `${50 + offsetX}% ${50 + offsetY}%`;
 });
 
-// Función que se ejecuta cuando se carga la página
 window.onload = function() {
+    const messageDisplay = document.getElementById('message');
     if (bestReactionTime !== Infinity) {
-        messageDisplay.innerHTML = `Mejor tiempo: ${bestReactionTime} ms <br> Presiona F5 para reiniciar`;
+        messageDisplay.textContent = `Mejor tiempo: ${bestReactionTime} ms |\n Presiona F5 para reiniciar`;
     } else {
         messageDisplay.textContent = 'Presiona espacio cuando la luz se ponga verde.';
     }
